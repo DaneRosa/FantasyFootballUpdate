@@ -5,12 +5,9 @@ from getpass import getpass
 from smtplib import SMTP_SSL
 from EmailMessageBuilder import getMessageHTML
 
-
-
-
-
-
-login, password = 'possardtemailsender@gmail.com', '2001Jetta'
+#right now using random created account
+#  will use personal email in future..
+login, password = 'rpossardt@gmail.com', getpass()
 to = 'ryan.possardt@uconn.edu'
 recipients = [to]
 
@@ -22,7 +19,7 @@ msg = MIMEText(getMessageHTML(3), 'html')
 
 
 
-msg['Subject'] = Header('Test12', 'utf-8')
+msg['Subject'] = Header('Last Test?', 'utf-8')
 msg['From'] = login
 msg['To'] = ", ".join(recipients)
 

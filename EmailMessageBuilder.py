@@ -1,4 +1,4 @@
-from ESPNScraper import getWeeklyTeamAndScoreDictionary, getTeamStandingsEast, getTeamStandingsWest
+from ESPNScraper import getWeeklyTeamAndScoreDictionary, getTeamStandingsEast, getTeamStandingsWest, getWestDivisionPFDict, getEastDivisionPFDict
 
 def getMessageHTML(week):
 	weeklyTeamScoresDict = getWeeklyTeamAndScoreDictionary(week)
@@ -6,6 +6,22 @@ def getMessageHTML(week):
 	weeklyTeamScoresDictKeys.sort()
 	teamStandingsEast = getTeamStandingsEast()
 	teamStandingsWest = getTeamStandingsWest()
+	teamPFEast = getEastDivisionPFDict()
+	teamPFWest = getWestDivisionPFDict()
+	teamPFEastKeys = list(teamPFEast.keys())
+	teamPFWestKeys = list(teamPFWest.keys())
+	teamPFEastKeys.sort()
+	teamPFWestKeys.sort()
+	lowestPF = teamPFEastKeys[0]
+	highestPF = teamPFEastKeys[3]
+	lowestPFTeamName = teamPFEast[teamPFEastKeys[0]]
+	highestPFTeamName = teamPFEast[teamPFEastKeys[3]]
+	if(teamPFEastKeys[0] > teamPFWestKeys[0]):
+		lowestPFTeamName = teamPFWest[teamPFWestKeys[0]]
+		lowestPF = teamPFWestKeys[0]
+	if(teamPFEastKeys[3] < teamPFWestKeys[3]):
+		highestPFTeamName = teamPFWest[teamPFWestKeys[3]]
+		highestPF = teamPFWestKeys[3]
 	return """
 	<HTML>
 <!-- Change this style tag to inline eventually -->
@@ -28,7 +44,7 @@ def getMessageHTML(week):
 	<tr>
 		<td style="float:left;" width="10%"></td>
 		<td style="float:left;" width="50%">""" + weeklyTeamScoresDict[weeklyTeamScoresDictKeys[7]] + """</td>
-		<td style="float:left;"><div style="border-radius:50%;	width: 90px;height: 90px;padding: 8px;background: lightgreen;border: 0px solid #666;color: #666;text-align: center;font: 32px Arial, sans-serif;">""" + str(weeklyTeamScoresDictKeys[7]) + """</div></td>
+		<td style="float:left;"><div style="width:90px;height:90px;border-radius:45px;font-size:32px;color:#000;line-height:90px;text-align:center;background:lightgreen">""" + str(weeklyTeamScoresDictKeys[7]) + """</div></td>
 	</tr>
 	<tr style="background-color: white;height:5px;"><td></td></tr>
 	
@@ -39,7 +55,7 @@ def getMessageHTML(week):
 	<tr style="background-color:lightgreen">
 		<td style="float:left;" width="10%"></td>
 		<td style="float:left;" width="50%">""" + weeklyTeamScoresDict[weeklyTeamScoresDictKeys[0]] + """</td>
-		<td style="float:left;"><div style="border-radius:50%;	width: 70px;height: 70px;padding: 8px;background: white;border: 0px solid #666;color: #666;text-align: center;font: 32px Arial, sans-serif;">""" + str(weeklyTeamScoresDictKeys[0]) + """</div></td>
+		<td style="float:left;"><div style="width:70px;height:70px;border-radius:35px;font-size:28px;color:#000;line-height:70px;text-align:center;background:#fff">""" + str(weeklyTeamScoresDictKeys[0]) + """</div></td>
 	</tr>
 	<tr style="background-color: lightgreen;height:5px;"><td></td></tr>
 	
@@ -101,8 +117,8 @@ def getMessageHTML(week):
 	</tr>
 	<tr style="background-color:lightgreen">
 		<td style="float:left;" width="10%"></td>
-		<td style="float:left;" width="50%">TeamName</td>
-		<td style="float:left;"><div style="border-radius:50%;	width: 70px;height: 70px;padding: 8px;background: white;border: 0px solid #666;color: #666;text-align: center;vertical-align:center;font: 32px Arial, sans-serif;">500</div></td>
+		<td style="float:left;" width="50%">""" + highestPFTeamName + """</td>
+		<td style="float:left;"><div style="width:110px;height:110px;border-radius:55px;font-size:34px;color:#000;line-height:110px;text-align:center;background:#fff">"""+ str(highestPF) +"""</div></td>
 	</tr>
 	<tr style="background-color: lightgreen;height:5px;"><td></td></tr>
 
@@ -112,8 +128,8 @@ def getMessageHTML(week):
 	</tr>
 	<tr>
 		<td style="float:left;" width="10%"></td>
-		<td style="float:left;" width="50%">TeamName</td>
-		<td style="float:left;"><div style="border-radius:50%;	width: 70px;height: 70px;padding: 8px;background: lightgreen;border: 0px solid #666;color: #666;text-align: center;font: 32px Arial, sans-serif;">100</div></td>
+		<td style="float:left;" width="50%">"""+ lowestPFTeamName +"""</td>
+		<td style="float:left;"><div style="width:90px;height:90px;border-radius:45px;font-size:30px;color:#000;line-height:90px;text-align:center;background:lightgreen">"""+ str(lowestPF) +"""</div></td>
 	</tr>
 	<tr style="background-color: white;height:5px;"><td></td></tr>
 	
