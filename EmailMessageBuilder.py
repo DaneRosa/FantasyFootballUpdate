@@ -1,4 +1,4 @@
-from ESPNScraper import getWeeklyTeamAndScoreDictionary, getTeamStandingsEast, getTeamStandingsWest, getWestDivisionPFDict, getEastDivisionPFDict
+from ESPNScraper import getWeeklyTeamAndScoreDictionary, getTeamStandingsEast, getTeamStandingsWest, getLeaguePFDict
 
 def getMessageHTML(week):
 	weeklyTeamScoresDict = getWeeklyTeamAndScoreDictionary(week)
@@ -6,22 +6,16 @@ def getMessageHTML(week):
 	weeklyTeamScoresDictKeys.sort()
 	teamStandingsEast = getTeamStandingsEast()
 	teamStandingsWest = getTeamStandingsWest()
-	teamPFEast = getEastDivisionPFDict()
-	teamPFWest = getWestDivisionPFDict()
-	teamPFEastKeys = list(teamPFEast.keys())
-	teamPFWestKeys = list(teamPFWest.keys())
-	teamPFEastKeys.sort()
-	teamPFWestKeys.sort()
-	lowestPF = teamPFEastKeys[0]
-	highestPF = teamPFEastKeys[3]
-	lowestPFTeamName = teamPFEast[teamPFEastKeys[0]]
-	highestPFTeamName = teamPFEast[teamPFEastKeys[3]]
-	if(teamPFEastKeys[0] > teamPFWestKeys[0]):
-		lowestPFTeamName = teamPFWest[teamPFWestKeys[0]]
-		lowestPF = teamPFWestKeys[0]
-	if(teamPFEastKeys[3] < teamPFWestKeys[3]):
-		highestPFTeamName = teamPFWest[teamPFWestKeys[3]]
-		highestPF = teamPFWestKeys[3]
+	leaguePFDict = getLeaguePFDict()
+	leaguePFDictKeys = list(leaguePFDict.keys())
+	leaguePFDictKeys.sort()
+
+	lowestPF = leaguePFDictKeys[0]
+	lowestPFTeamName = leaguePFDict[lowestPF]
+
+	highestPF = leaguePFDictKeys[-1]
+	highestPFTeamName = leaguePFDict[highestPF]
+
 	return """
 	<HTML>
 <!-- Change this style tag to inline eventually -->
@@ -43,8 +37,8 @@ def getMessageHTML(week):
 	</tr>
 	<tr>
 		<td style="float:left;" width="10%"></td>
-		<td style="float:left;" width="50%">""" + weeklyTeamScoresDict[weeklyTeamScoresDictKeys[7]] + """</td>
-		<td style="float:left;"><div style="width:90px;height:90px;border-radius:45px;font-size:32px;color:#000;line-height:90px;text-align:center;background:lightgreen">""" + str(weeklyTeamScoresDictKeys[7]) + """</div></td>
+		<td style="float:left;" width="50%">""" + weeklyTeamScoresDict[weeklyTeamScoresDictKeys[-1]] + """</td>
+		<td style="float:left;"><div style="width:90px;height:90px;border-radius:45px;font-size:32px;color:#000;line-height:90px;text-align:center;background:lightgreen">""" + str(weeklyTeamScoresDictKeys[-1]) + """</div></td>
 	</tr>
 	<tr style="background-color: white;height:5px;"><td></td></tr>
 	

@@ -13,7 +13,7 @@ recipients = [to]
 
 # create message
 #msg = MIMEText(getDealString('https://meh.com'), 'plain', 'utf-8')
-msg = MIMEText(getMessageHTML(3), 'html')
+msg = MIMEText(getMessageHTML(1), 'html')
 
 
 
