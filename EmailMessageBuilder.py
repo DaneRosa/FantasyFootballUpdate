@@ -1,3 +1,6 @@
+#
+# Builds the message HTML, and fills in information gathered from webscraper.
+#
 from ESPNScraper import getWeeklyTeamAndScoreDictionary, getTeamStandingsEast, getTeamStandingsWest, getLeaguePFDict
 
 def getMessageHTML(week):

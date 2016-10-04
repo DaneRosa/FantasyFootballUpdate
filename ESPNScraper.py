@@ -1,5 +1,7 @@
+#
 #ESPN web Fantasy Football Scraper
-#Takes the information from a league and returns it as different data structures
+#  Takes the information from a league and returns it as different data structures
+#
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
@@ -9,6 +11,10 @@ def getSoup(url):
 	http = urlopen(url)
 	soup = BeautifulSoup(http.read(), "html.parser")
 	return soup
+
+def getTeamNameAndRecordString(team, wins, losses):
+	return team + ' (' + wins + '-' + losses + ')'
+
 
 def addTeamAndPFToDict(score, teamName, dictionary):
 	if score in dictionary:
@@ -27,14 +33,6 @@ def getWeeklyTeamAndScoreDictionary(weekNumber):
 		teamName = soup.find("tr",id=tableRowId).find("td",class_="team").find("div",class_="name").find("a").string
 		addTeamAndPFToDict(float(teamScore), teamName, weeklyTeamScoresDict)
 	return weeklyTeamScoresDict
-
-#scoresDict = getWeeklyTeamAndScoreDictionary(1)
-#print(scoresDict)
-
-def getTeamNameAndRecordString(team, wins, losses):
-	return team + ' (' + wins + '-' + losses + ')'
-
-
 
 
 def getTeamStandingsEast():
@@ -117,25 +115,6 @@ def getLeaguePFDict():
 	addTeamAndPFToDict(float(teamTwoWestPF), teamTwoWestName, teamAndPointsForDict)
 	addTeamAndPFToDict(float(teamThreeWestPF), teamThreeWestName, teamAndPointsForDict)
 	addTeamAndPFToDict(float(teamFourWestPF), teamOneEastName, teamAndPointsForDict)
-	
-	return teamAndPointsForDict
-
-def getWestDivisionPFDict():
-	teamAndPointsForDict = {}
-	leagueStandingsUrl = "http://games.espn.com/ffl/standings?leagueId=1940569&seasonId=2016"
-	soup = getSoup(leagueStandingsUrl)
-	TeamOneName = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").find("td").find("a").string
-	TeamOnePF = soup.find("table", id="xstandTbl_div1").find("tr",class_="bodyCopy").find("td").findNext("td").string
-	teamAndPointsForDict.update({float(TeamOnePF) : TeamOneName})
-	TeamTwoName = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").find("td").find("a").string
-	TeamTwoPF = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").find("td").findNext("td").string
-	teamAndPointsForDict.update({float(TeamTwoPF) : TeamTwoName})
-	TeamThreeName = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").find("td").find("a").string
-	TeamThreePF = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").find("td").findNext("td").string
-	teamAndPointsForDict.update({float(TeamThreePF) : TeamThreeName})
-	TeamFourName = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").findNext("tr").find("td").find("a").string
-	TeamFourPF = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").string
-	teamAndPointsForDict.update({float(TeamFourPF) : TeamFourName})
 	return teamAndPointsForDict
 
 #DEBUGGING
