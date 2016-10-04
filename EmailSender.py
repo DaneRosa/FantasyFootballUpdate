@@ -8,26 +8,23 @@ from EmailMessageBuilder import getMessageHTML
 #right now using random created account
 #  will use personal email in future..
 login, password = 'rpossardt@gmail.com', getpass()
-to = 'ryan.possardt@uconn.edu'
-recipients = [to]
+testEmail = 'ryan.possardt@uconn.edu'
+leagueEmails = []
 
 # create message
 #msg = MIMEText(getDealString('https://meh.com'), 'plain', 'utf-8')
-msg = MIMEText(getMessageHTML(1), 'html')
+msg = MIMEText(getMessageHTML(4), 'html')
 
 
-
-
-
-msg['Subject'] = Header('Last Test?', 'utf-8')
+msg['Subject'] = Header('Again!', 'utf-8')
 msg['From'] = login
-msg['To'] = ", ".join(recipients)
-
+#msg['To'] = ", ".join(leagueEmails)
+msg['To'] = testEmail
 # send it via gmail
 s = SMTP_SSL('smtp.gmail.com', 465, timeout=10)
 s.set_debuglevel(1)
 try:
     s.login(login, password)
-    s.sendmail(msg['From'], recipients, msg.as_string())
+    s.sendmail(msg['From'], testEmail, msg.as_string())
 finally:
     s.quit()

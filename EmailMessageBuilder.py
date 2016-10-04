@@ -26,7 +26,7 @@ def getMessageHTML(week):
 	<tr>
 		<th width="100%" style="background-color: lightgreen; font-size:50px;">
 			
-				Tolland Fantasy Buttball Weekly Results
+				Tolland Fantasy Buttball Week """ + str(week) + """ Results
 					
 		</th>
 	</tr>
@@ -38,7 +38,7 @@ def getMessageHTML(week):
 	<tr>
 		<td style="float:left;" width="10%"></td>
 		<td style="float:left;" width="50%">""" + weeklyTeamScoresDict[weeklyTeamScoresDictKeys[-1]] + """</td>
-		<td style="float:left;"><div style="width:90px;height:90px;border-radius:45px;font-size:32px;color:#000;line-height:90px;text-align:center;background:lightgreen">""" + str(weeklyTeamScoresDictKeys[-1]) + """</div></td>
+		<td style="float:left;"><div style="width:100px;height:100px;border-radius:50px;font-size:32px;color:#000;line-height:100px;text-align:center;background:lightgreen">""" + str(weeklyTeamScoresDictKeys[-1]) + """</div></td>
 	</tr>
 	<tr style="background-color: white;height:5px;"><td></td></tr>
 	
@@ -107,7 +107,7 @@ def getMessageHTML(week):
 
 	<!--Most points scored so far -->
 	<tr style="background-color:lightgreen;">
-		<td style="float:left;"><strong>Overall Scoring Leader:</strong></td>
+		<td style="float:left;"><strong>League Scoring Leader:</strong><div style="font-size:10px">(Overall)</div></td>
 	</tr>
 	<tr style="background-color:lightgreen">
 		<td style="float:left;" width="10%"></td>
@@ -118,7 +118,7 @@ def getMessageHTML(week):
 
 	<!--Least points scored so far -->
 	<tr>
-		<td style="float:left;"><strong>Overall Scoring Loser:</strong></td>
+		<td style="float:left;"><strong>League Scoring Loser:</strong><div style="font-size:10px">(Overall)</div></td>
 	</tr>
 	<tr>
 		<td style="float:left;" width="10%"></td>
@@ -131,7 +131,7 @@ def getMessageHTML(week):
 
 	<!--Bottom row -->
 	<tr style="background-color:lightgreen; font-size: 12px;">
-		<td style="float:left;">Copyright Ryan Possardt</td>
+		<td style="float:left;">Ryan Possardt</td>
 	</tr>
 </tbody>
 </table>
