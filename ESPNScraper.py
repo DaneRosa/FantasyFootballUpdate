@@ -23,22 +23,27 @@ def addTeamAndPFToDict(score, teamName, dictionary):
 	else:
 		dictionary.update({score : teamName})
 
-def getWeeklyTeamAndScoreDictionary(weekNumber):
-	scoreboardUrl = "http://games.espn.com/ffl/scoreboard?leagueId=1940569&matchupPeriodId=" + str(weekNumber)
-	soup = getSoup(scoreboardUrl)
+def getWeeklyTeamAndScoreDictionary(weekNumber, scoreboardURL):
+	scoreboardURL += str(weekNumber)
+	soup = getSoup(scoreboardURL)
 	weeklyTeamScoresDict = {}
-	for i in range(1,9):
+	leagueSize = 0
+	for i in range(1,13):
 		tableRowId = 'teamscrg_' + str(i) + '_activeteamrow'
-		teamScore = soup.find("tr", id=tableRowId).find("td",class_="score").string
-		teamName = soup.find("tr",id=tableRowId).find("td",class_="team").find("div",class_="name").find("a").string
-		addTeamAndPFToDict(float(teamScore), teamName, weeklyTeamScoresDict)
-	return weeklyTeamScoresDict
+		if soup.find("tr", id=tableRowId) is None:
+			print('why can\'t you name these divs tr s nicely ESPN?')
+		else:
+			leagueSize+=1
+			teamScore = soup.find("tr", id=tableRowId).find("td",class_="score").string
+			teamName = soup.find("tr",id=tableRowId).find("td",class_="team").find("div",class_="name").find("a").string
+			addTeamAndPFToDict(float(teamScore), teamName, weeklyTeamScoresDict)
+	print("HEY THIS IS THE LEAGUE SIZE " + str(leagueSize))
+	return (weeklyTeamScoresDict, leagueSize)
 
 
-def getTeamStandingsEast():
+def getTeamStandingsEast(leagueStandingsURL,leagueSize):
 	eastDivisionStandings = []
-	leagueStandingsUrl = "http://games.espn.com/ffl/standings?leagueId=1940569&seasonId=2016"
-	soup = getSoup(leagueStandingsUrl)
+	soup = getSoup(leagueStandingsURL)
 	TeamOneName = soup.find("tr",class_="tableBody").find("a").string
 	TeamOneWins = soup.find("tr",class_="tableBody").find("td").findNext("td").string
 	TeamOneLosses = soup.find("tr",class_="tableBody").find("td").findNext("td").findNext("td").string
@@ -55,12 +60,18 @@ def getTeamStandingsEast():
 	TeamFourWins = soup.find("tr",class_="tableBody").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").string
 	TeamFourLosses = soup.find("tr",class_="tableBody").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").findNext("td").string
 	eastDivisionStandings.append(getTeamNameAndRecordString(TeamFourName,TeamFourWins,TeamFourLosses))
+	#TODO: if league size > 8, we need to also add the teams that are missing.
+	if int(leagueSize) == 10 or int(leagueSize) == 12:
+		#Do the thing
+		TeamFiveName = soup.find("tr",class_="tableBody").findNext("tr").findNext("tr").findNext("tr").findNext("tr").find("a").string
+		TeamFiveWins = soup.find("tr",class_="tableBody").findNext("tr").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").string
+		TeamFiveLosses = soup.find("tr",class_="tableBody").findNext("tr").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").findNext("td").string
+		eastDivisionStandings.append(getTeamNameAndRecordString(TeamFiveName,TeamFiveWins,TeamFiveLosses))
 	return eastDivisionStandings
 
-def getTeamStandingsWest():
+def getTeamStandingsWest(leagueStandingsURL,leagueSize):
 	westDivisionStandings = []
-	leagueStandingsUrl = "http://games.espn.com/ffl/standings?leagueId=1940569&seasonId=2016"
-	soup = getSoup(leagueStandingsUrl)
+	soup = getSoup(leagueStandingsURL)
 	TeamOneName = soup.find("table",class_="tableBody").findNext("table").find("tr",class_="tableBody").find("a").string
 	TeamOneWins = soup.find("table",class_="tableBody").findNext("table").find("tr",class_="tableBody").find("td").findNext("td").string
 	TeamOneLosses = soup.find("table",class_="tableBody").findNext("table").find("tr",class_="tableBody").find("td").findNext("td").findNext("td").string
@@ -77,33 +88,48 @@ def getTeamStandingsWest():
 	TeamFourWins = soup.find("table",class_="tableBody").findNext("table").find("tr",class_="tableBody").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").string
 	TeamFourLosses = soup.find("table",class_="tableBody").findNext("table").find("tr",class_="tableBody").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").findNext("td").string
 	westDivisionStandings.append(getTeamNameAndRecordString(TeamFourName,TeamFourWins,TeamFourLosses))
+	if int(leagueSize) == 10 or int(leagueSize) == 12:
+		#Do the thing
+		TeamFiveName = soup.find("tr",class_="tableBody").findNext("tr").findNext("tr").findNext("tr").findNext("tr").find("a").string
+		TeamFiveWins = soup.find("tr",class_="tableBody").findNext("tr").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").string
+		TeamFiveLosses = soup.find("tr",class_="tableBody").findNext("tr").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").findNext("td").string
+		westDivisionStandings.append(getTeamNameAndRecordString(TeamFiveName,TeamFiveWins,TeamFiveLosses))
 	return westDivisionStandings
 
-def getLeaguePFDict():
+def getLeaguePFDict(leagueStandingsURL,leagueSize):
 	teamAndPointsForDict = {}
-	leagueStandingsUrl = "http://games.espn.com/ffl/standings?leagueId=1940569&seasonId=2016"
-	soup = getSoup(leagueStandingsUrl)
+	soup = getSoup(leagueStandingsURL)
 	
 	#East division:
 	teamOneEastName = soup.find("tr",class_="bodyCopy").find("td").find("a").string
-	teamOneEastPF = soup.find("tr",class_="bodyCopy").find("td").findNext("td").string
 	teamTwoEastName = soup.find("tr",class_="bodyCopy").findNext("tr").find("td").find("a").string
-	teamTwoEastPF = soup.find("tr",class_="bodyCopy").findNext("tr").find("td").findNext("td").string
 	teamThreeEastName = soup.find("tr",class_="bodyCopy").findNext("tr").findNext("tr").find("td").find("a").string
-	teamThreeEastPF = soup.find("tr",class_="bodyCopy").findNext("tr").findNext("tr").find("td").findNext("td").string
 	teamFourEastName = soup.find("tr",class_="bodyCopy").findNext("tr").findNext("tr").findNext("tr").find("td").find("a").string
+
+	teamOneEastPF = soup.find("tr",class_="bodyCopy").find("td").findNext("td").string
+	teamTwoEastPF = soup.find("tr",class_="bodyCopy").findNext("tr").find("td").findNext("td").string
+	teamThreeEastPF = soup.find("tr",class_="bodyCopy").findNext("tr").findNext("tr").find("td").findNext("td").string
 	teamFourEastPF = soup.find("tr",class_="bodyCopy").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").string
 	
 	#West division:
 	teamOneWestName = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").find("td").find("a").string
-	teamOneWestPF = soup.find("table", id="xstandTbl_div1").find("tr",class_="bodyCopy").find("td").findNext("td").string
 	teamTwoWestName = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").find("td").find("a").string
-	teamTwoWestPF = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").find("td").findNext("td").string
 	teamThreeWestName = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").find("td").find("a").string
-	teamThreeWestPF = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").find("td").findNext("td").string
 	teamFourWestName = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").findNext("tr").find("td").find("a").string
+
+	teamOneWestPF = soup.find("table", id="xstandTbl_div1").find("tr",class_="bodyCopy").find("td").findNext("td").string
+	teamTwoWestPF = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").find("td").findNext("td").string
+	teamThreeWestPF = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").find("td").findNext("td").string
 	teamFourWestPF = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").string
 	
+	if int(leagueSize) == 10 or int(leagueSize) == 12:
+		teamFiveEastName = soup.find("tr",class_="bodyCopy").findNext("tr").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").string
+		teamFiveEastPF = soup.find("tr",class_="bodyCopy").findNext("tr").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").string
+		addTeamAndPFToDict(float(teamFiveEastPF),teamFiveEastName,teamAndPointsForDict)
+
+		teamFiveWestName = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").findNext("tr").findNext("tr").find("td").find("a").string
+		teamFiveWestPF = soup.find("table",id="xstandTbl_div1").find("tr",class_="bodyCopy").findNext("tr").findNext("tr").findNext("tr").findNext("tr").find("td").findNext("td").string
+		addTeamAndPFToDict(float(teamFiveWestPF),teamFiveWestName,teamAndPointsForDict)
 	#addTeamAndPFToDict(score, teamname, dictionary)
 	# East:
 	addTeamAndPFToDict(float(teamOneEastPF), teamOneEastName, teamAndPointsForDict)
