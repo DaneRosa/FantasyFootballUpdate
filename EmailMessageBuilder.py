@@ -22,6 +22,7 @@ def getMessageHTML(week, inputsArray,leagueScoreboardURL,leagueStandingsURL):
 	highestPF = leaguePFDictKeys[-1]
 	highestPFTeamName = leaguePFDict[highestPF]
 
+	print(weeklyTeamScoresDictKeys)
 	#Use array of strings we will join later.
 	emailMessageList = []
 	indexCounter = 0
@@ -30,7 +31,7 @@ def getMessageHTML(week, inputsArray,leagueScoreboardURL,leagueStandingsURL):
 <body style="min-width:100%;margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-left:0;padding-right:0;font-family:Arial, sans-serif;">
 <table align="center" style="width:500px;table-layout:fixed;border-spacing:0;font:20px Arial, sans-serif;">
 	<col style="width:5%">
-	<col style="width:20%">
+	<col style="width:30%">
 	<col style="width:20%">
 <tbody>
 	<tr>
