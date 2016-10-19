@@ -36,7 +36,7 @@ def getMessageHTML(week, inputsArray,leagueScoreboardURL,leagueStandingsURL):
 <tbody>
 	<tr>
 		<th colspan="3" width="100%" style="background-color: lightgreen; font-size:50px;">""")
-	emailMessageList.append(inputsArray[0] + """ week """)
+	emailMessageList.append(inputsArray[0] + """ Week """)
 	emailMessageList.append(str(week) + """ Results			
 		</th>
 	</tr>
