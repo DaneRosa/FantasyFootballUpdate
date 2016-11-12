@@ -37,7 +37,7 @@ def getMessageHTML(week, inputsArray,leagueScoreboardURL,leagueStandingsURL,leag
 	mostPointsOnBenchTeamName = leagueBenchScoreDict[mostPointsOnBench]
 
 
-
+	# Need fix for categories where numbers are now >1000
 	#Use array of strings we will join later.
 	emailMessageList = []
 	emailMessageList.append("""
@@ -63,7 +63,7 @@ def getMessageHTML(week, inputsArray,leagueScoreboardURL,leagueStandingsURL,leag
 	<tr>
 		<td></td>
 		<td>""" + highestPFTeamName + """</td>
-		<td><div style="width:110px;height:110px;border-radius:55px;font-size:34px;color:#000;line-height:110px;text-align:center;background:lightgreen">""" + str(highestPF) + """</div></td>
+		<td><div style="width:110px;height:110px;border-radius:55px;font-size:28px;color:#000;line-height:110px;text-align:center;background:lightgreen">""" + str(highestPF) + """</div></td>
 	</tr>
 	<tr style="height:5px;"><td colspan="3"></td></tr>""")
 	
@@ -139,7 +139,7 @@ def getMessageHTML(week, inputsArray,leagueScoreboardURL,leagueStandingsURL,leag
 	<tr style="background:lightgreen;">
 		<td></td>
 		<td>""" + lowestPFTeamName + """</td>
-		<td><div style="width:90px;height:90px;border-radius:45px;font-size:32px;color:#000;line-height:90px;text-align:center;background:#fff">""" + str(lowestPF) + """</div></td>
+		<td><div style="width:90px;height:90px;border-radius:45px;font-size:26px;color:#000;line-height:90px;text-align:center;background:#fff">""" + str(lowestPF) + """</div></td>
 	</tr>
 	<tr style="background-color:lightgreen;height:5px;"><td colspan="3"></td></tr>
 	""")
@@ -151,7 +151,7 @@ def getMessageHTML(week, inputsArray,leagueScoreboardURL,leagueStandingsURL,leag
 	<tr>
 		<td></td>
 		<td>""" + mostPATeamName + """</td>
-		<td><div style="width:100px;height:100px;border-radius:50px;font-size:32px;color:#000;line-height:100px;text-align:center;background:lightgreen">""" + str(mostPA) + """</div></td>
+		<td><div style="width:100px;height:100px;border-radius:50px;font-size:26px;color:#000;line-height:100px;text-align:center;background:lightgreen">""" + str(mostPA) + """</div></td>
 	</tr>
 	<tr style="height:5px;"><td colspan="3"></td></tr>
 	""")
